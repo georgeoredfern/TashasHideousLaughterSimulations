@@ -7,7 +7,7 @@ now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 print(current_time)
 
-CMCs = [19,25,11,0,0,4,0,0,1]
+CMCs = [18,26,8,1,0,4,0,3]
 
 deckTemplate = []
 cmc = 0
@@ -20,36 +20,35 @@ for each in CMCs:
 
 MilledCards = []
 TotalRuns = 0
-while TotalRuns < 100000:
+while TotalRuns < 1000000:
     shuffle(deckTemplate)
     maxNewDeck = len(deckTemplate) + 1 - 10
     NewDeck = deckTemplate[0:maxNewDeck]
     TotalExiled = 0
     while TotalExiled < 20:
         TotalExiled += NewDeck.pop()
-    CardsExiled = maxNewDeck - 1 - len(NewDeck)
+    CardsExiled = maxNewDeck - len(NewDeck)
     MilledCards.append(CardsExiled)
     TotalRuns +=1
 
 print(max(MilledCards))
 MilledCount = []
 RawMilledCount = []
-for each in range(0,max(MilledCards)):
+Mode = 0
+ModeCount = 0
+for each in range(0,max(MilledCards)+1):
     MilledCount.append(MilledCards.count(each) / TotalRuns)
     RawMilledCount.append(MilledCards.count(each))
+    if MilledCards.count(each) > ModeCount:
+        Mode = each
+        ModeCount = MilledCards.count(each)
+print('Modal cards milled: ' + str(Mode))
 
-plt.plot(RawMilledCount, color='black')
+plt.plot(MilledCount, color='black')
 Mean = sum(MilledCards) / len(MilledCards)
-stdv = stdev(MilledCards)
-twostdvMin = Mean - (2 * stdv)
-twostdvMax = Mean + (2 * stdv)
-onestvMin = Mean - stdv
-onestvMax = Mean + stdv
+print('Average cards milled: ' + str(Mean))
 plt.axvline(Mean, color='g')
-#plt.axvline(twostdvMin, color='r')
-#plt.axvline(twostdvMax, color='r')
-#plt.axvline(onestvMax, color='b')
-#plt.axvline(onestvMin, color='b')
+
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 print(current_time)
